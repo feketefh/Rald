@@ -1,0 +1,3 @@
+{
+    "cogs": ["general", "embedEditor", "welcome", "goodbye", "moderation", "music", "image", "fun", "support", "counting", "mc", "leveling", "utils", "number"]
+}
