@@ -25,7 +25,7 @@ Rald is a multifunctional Discord bot build with Py-cord. Rald has multi server 
     apt install python3-pip
     pip install wavelink
     pip install py-cord
-    pip install -m requirements.txt```
+    pip install -r requirements.txt```
 5. Start the bot and enjoy
 
 ---
