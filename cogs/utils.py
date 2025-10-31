@@ -4,12 +4,13 @@ import discord
 from typing import Union
 
 from modules.bugReport import bugReport
+from modules import subCommands
 
 class utils(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    utils = discord.SlashCommandGroup("utils", "Utility commands")
+    utils = subCommands.utils
 
     @utils.command(name="userinfo", description="Get every information about a user")
     @option("member", Union[discord.Member], description="Which user's info do you want?", required=False)

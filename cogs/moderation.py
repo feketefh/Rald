@@ -1,5 +1,4 @@
 import discord
-from discord.commands import SlashCommandGroup
 from discord.ext.commands import has_permissions, MissingPermissions
 from discord.ext import commands
 from discord import option
@@ -7,12 +6,13 @@ from discord import option
 import datetime
 
 from modules.bugReport import bugReport
+from modules import subCommands
 
 class admin(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    admin_group = SlashCommandGroup("admin", "Admin commands")
+    admin_group = subCommands.admin_group
 
     @admin_group.command(name="ban", description="Ban a user")
     @option("member", discord.Member, description="Which user do you want to ban?", required=True)

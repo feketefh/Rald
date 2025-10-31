@@ -1,21 +1,20 @@
 import discord
-from discord.commands import SlashCommandGroup
 from discord.ext import commands
 from discord import option
 
 import requests
 import random
 import urllib.parse
-
 from typing import Union
 
 from modules.bugReport import bugReport
+from modules import subCommands
 
 class fun(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    fun = discord.SlashCommandGroup("fun", "Fun comands")
+    fun = subCommands.fun
 
     @fun.command(name="rquote", description="Get a random quote")
     async def rquote(self, ctx: discord.ApplicationContext):

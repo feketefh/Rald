@@ -10,6 +10,8 @@ import os
 import re
 from dotenv import load_dotenv
 
+from modules import subCommands
+
 load_dotenv(dotenv_path=".env")
 
 class Music(commands.Cog):
@@ -41,7 +43,7 @@ class Music(commands.Cog):
         except Exception as e:
             print(f"❌ Lavalink connection failed: {e}")
 
-    music = discord.SlashCommandGroup("music", "Music commands")
+    music = subCommands.music
 
     def get_player(self, guild: discord.Guild):
         return wavelink.Pool.get_node().get_player(guild.id)

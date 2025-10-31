@@ -1,13 +1,12 @@
 import discord
-from discord.commands import SlashCommandGroup
 from discord.ext import commands
 from discord import option
 
 from typing import Union
-from PIL import Image
-from io import BytesIO
 import requests
+
 from modules.bugReport import bugReport
+from modules import subCommands
 
 class image(commands.Cog):
     def __init__(self, bot: discord.Bot):
@@ -21,7 +20,7 @@ class image(commands.Cog):
             "525", "530", "599"
         ]
 
-    image = discord.SlashCommandGroup("image", "Image generator")
+    image = subCommands.image
 
     @image.command(name="httpcat", description="Get an HTTP status code cat image")
     @option("code", description="HTTP status code", required=True)

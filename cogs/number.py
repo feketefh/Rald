@@ -1,20 +1,17 @@
 import discord
-from discord.commands import SlashCommandGroup
 from discord.ext import commands
 from discord import option
 
-import requests
 import random
-import urllib.parse
-from typing import Union
 
 from modules.bugReport import bugReport
+from modules import subCommands
 
 class number(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    number = discord.SlashCommandGroup("number", "Number commands")
+    number = subCommands.number
 
     @number.command(name="random", description="Generates a random number between two given numbers")
     @option("min_val", int, description="Lower limit", required=True)

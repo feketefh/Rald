@@ -13,8 +13,8 @@ import itertools
 import datetime
 
 intents = discord.Intents.all()
-bot: discord.Bot = discord.Bot(intents=intents, owner_id=1250010803462078464)
-bot.start_time = datetime.datetime.utcnow()
+bot: commands.Bot = commands.Bot(intents=intents, command_prefix="~", owner_id=1250010803462078464)
+bot.start_time = datetime.datetime.now(datetime.timezone.utc)
 with open('data.json') as f:
     data: dict = json.load(f)
 
@@ -61,71 +61,21 @@ async def update_status():
 async def on_guild_join(guild: discord.Guild):
     await bot.sync_commands(guild_ids=[guild.id])
 
-dev_group = discord.SlashCommandGroup("dev", "Dev commands")
 
-@dev_group.command(name="load", description="Load a cog")
-@option("cog", str, description="Which cog do you want to load?", required=True)
+@bot.command()
 @commands.is_owner()
-async def load_cog(ctx: discord.ApplicationContext, cog: str):
-    await ctx.defer()
-    await handle_cog(ctx, "load", cog)
-
-@load_cog.error
-async def load_cog_error(ctx: discord.ApplicationContext, error):
-    if isinstance(error, MissingPermissions):
-        await ctx.respond("You do not have the necessary permissions to use this command.", ephemeral=True)
+async def cog(interaction: discord.Interaction, action: str = None, cog: str = None):
+    if action in ["load", "unload", "reload"] and cog:
+        await handle_cog(interaction, action, cog)
+    elif action == "list":
+        with open('data.json') as f:
+            data: dict = json.load(f)
+        cogs = ', '.join(data['cogs'])
+        await interaction.response.send_message(f"Cogs: {cogs}", ephemeral=True)
     else:
-        bugReport.sendReport("main", "load_cog", str(error))
-        await ctx.respond("An error occurred while executing command. Automatic bug report has been successfully sent to the developers.", ephemeral=True)
-
-@dev_group.command(name="unload", description="Unload a cog")
-@option("cog", str, description="Which cog do you want to unload?", required=True)
-@commands.is_owner()
-async def unload_cog(ctx: discord.ApplicationContext, cog: str):
-    await ctx.defer()
-    await handle_cog(ctx, "unload", cog)
-
-@unload_cog.error
-async def unload_cog_error(ctx: discord.ApplicationContext, error):
-    if isinstance(error, MissingPermissions):
-        await ctx.respond("You do not have the necessary permissions to use this command.", ephemeral=True)
-    else:
-        bugReport.sendReport("main", "unload_cog", str(error))
-        await ctx.respond("An error occurred while executing command. Automatic bug report has been successfully sent to the developers.", ephemeral=True)
-
-@dev_group.command(name="reload", description="Reload a cog")
-@option("cog", str, description="Which cog do you want to reload?", required=True)
-@commands.is_owner()
-async def reload_cog(ctx: discord.ApplicationContext, cog: str):
-    await ctx.defer()
-    await handle_cog(ctx, "reload", cog)
-
-@reload_cog.error
-async def reload_cog_error(ctx: discord.ApplicationContext, error):
-    if isinstance(error, MissingPermissions):
-        await ctx.respond("You do not have the necessary permissions to use this command.", ephemeral=True)
-    else:
-        bugReport.sendReport("main", "reload_cog", str(error))
-        await ctx.respond("An error occurred while executing command. Automatic bug report has been successfully sent to the developers.", ephemeral=True)
+        await interaction.response.send_message("Use the subcommands: load, unload, reload, list", delete_after=10)
 
 
-@dev_group.command(name="list", description="List all cogs")
-@commands.is_owner()
-async def listcogs(ctx: discord.ApplicationContext):
-    with open('data.json') as f:
-        data: dict = json.load(f)
-    cogs = ', '.join(data['cogs'])
-    await ctx.respond(f"Cogs: {cogs}")
-
-@listcogs.error
-async def listcogs_error(ctx: discord.ApplicationContext, error):
-    if isinstance(error, MissingPermissions):
-        await ctx.respond("You do not have the necessary permissions to use this command.", ephemeral=True)
-    else:
-        bugReport.sendReport("main", "listcogs", str(error))
-        await ctx.respond("An error occurred while executing command. Automatic bug report has been successfully sent to the developers.", ephemeral=True)
-
-bot.add_application_command(dev_group)
 load_dotenv(dotenv_path=".env")
 token: str = os.getenv("TOKEN")
 if token is None:

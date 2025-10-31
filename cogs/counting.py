@@ -1,5 +1,4 @@
 import discord
-from discord.commands import SlashCommandGroup
 from discord.ext import commands
 from discord import option
 from discord.ext.commands import has_permissions, MissingPermissions, BotMissingPermissions
@@ -7,16 +6,16 @@ from discord.ext.commands import has_permissions, MissingPermissions, BotMissing
 from typing import Union
 import asyncio
 import json
-import os
 
 from modules.bugReport import bugReport
+from modules import subCommands
 
 class Counting(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
         self.lock = asyncio.Lock()
 
-    counting = discord.SlashCommandGroup("counting", "Counting commands")
+    counting = subCommands.counting
 
     async def saveData(self, data):
         async with self.lock:
